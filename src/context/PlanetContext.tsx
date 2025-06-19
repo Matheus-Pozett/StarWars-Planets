@@ -19,14 +19,17 @@ export type PlanetType = {
 type PlanetContextType = {
   planets: PlanetType[];
   setPlanets: (data: PlanetType[]) => void;
+  nameFilter: string;
+  setNameFilter: (e: string) => void;
 };
 
 const PlanetContext = createContext<PlanetContextType | undefined>(undefined);
 
 function PlanetProvider({ children }: { children: React.ReactNode }) {
   const [planets, setPlanets] = useState<PlanetType[]>([]);
+  const [nameFilter, setNameFilter] = useState('');
   return (
-    <PlanetContext.Provider value={ { planets, setPlanets } }>
+    <PlanetContext.Provider value={ { planets, setPlanets, nameFilter, setNameFilter } }>
       {children}
     </PlanetContext.Provider>
   );
