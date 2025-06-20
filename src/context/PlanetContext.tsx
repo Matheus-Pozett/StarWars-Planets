@@ -1,26 +1,13 @@
 import { createContext, useContext, useState } from 'react';
-
-export type PlanetType = {
-  name: string;
-  rotation_period: string;
-  orbital_period: string;
-  diameter: string;
-  climate: string;
-  gravity: string;
-  terrain: string;
-  surface_water: string;
-  population: string;
-  films: string[];
-  created: string;
-  edited: string;
-  url: string;
-};
+import { FilterType, PlanetType } from '../types';
 
 type PlanetContextType = {
   planets: PlanetType[];
   setPlanets: (data: PlanetType[]) => void;
   nameFilter: string;
   setNameFilter: (e: string) => void;
+  filters: FilterType[];
+  setFilters: React.Dispatch<React.SetStateAction<FilterType[]>>;
 };
 
 const PlanetContext = createContext<PlanetContextType | undefined>(undefined);
@@ -28,8 +15,18 @@ const PlanetContext = createContext<PlanetContextType | undefined>(undefined);
 function PlanetProvider({ children }: { children: React.ReactNode }) {
   const [planets, setPlanets] = useState<PlanetType[]>([]);
   const [nameFilter, setNameFilter] = useState('');
+  const [filters, setFilters] = useState<FilterType[]>([]);
+
+  const values = {
+    planets,
+    setPlanets,
+    nameFilter,
+    setNameFilter,
+    filters,
+    setFilters,
+  };
   return (
-    <PlanetContext.Provider value={ { planets, setPlanets, nameFilter, setNameFilter } }>
+    <PlanetContext.Provider value={ values }>
       {children}
     </PlanetContext.Provider>
   );

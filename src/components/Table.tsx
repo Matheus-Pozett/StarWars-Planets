@@ -2,9 +2,10 @@ import { useEffect } from 'react';
 import { usePlanetContext } from '../context/PlanetContext';
 import { PlanetApiType } from '../types';
 import FilterTable from './FilterTable';
+import NumericFilter from './NumericFilter';
 
 function Table() {
-  const { planets, setPlanets, nameFilter } = usePlanetContext();
+  const { planets, setPlanets, nameFilter, filters } = usePlanetContext();
 
   useEffect(() => {
     const fetchPlanets = async () => {
@@ -26,13 +27,37 @@ function Table() {
     fetchPlanets();
   }, [setPlanets]);
 
-  const filterPlanets = planets.filter(
+  let filteredPlanets = planets.filter(
     (planet) => planet.name.toLowerCase().includes(nameFilter.toLowerCase()),
   );
+
+  filters.forEach((filter) => {
+    filteredPlanets = filteredPlanets.filter((planet) => {
+    // Se não houver filtro, retorna true para todos os planetas
+      if (filters.length === 0) {
+        return true;
+      }
+
+      const planetValue = Number(planet[filter.column as keyof typeof planet]);
+      const filterValue = Number(filter.value);
+
+      switch (filter.comparison) {
+        case 'maior que':
+          return planetValue > filterValue;
+        case 'menor que':
+          return planetValue < filterValue;
+        case 'igual a':
+          return planetValue === filterValue;
+        default:
+          return true;
+      }
+    });
+  });
 
   return (
     <div>
       <FilterTable />
+      <NumericFilter />
       <table>
         <thead>
           <tr>
@@ -52,7 +77,7 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {filterPlanets.map((planet) => (
+          {filteredPlanets.map((planet) => (
             <tr key={ planet.name }>
               <td>{planet.name}</td>
               <td>{planet.rotation_period}</td>

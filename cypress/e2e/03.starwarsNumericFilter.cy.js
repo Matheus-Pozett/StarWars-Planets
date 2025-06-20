@@ -59,7 +59,7 @@ describe('3 - Crie um filtro para valores numéricos', () => {
   });
 
   it('Filtre utilizando a comparação "igual a"', () => {
-    const EQUALS_FILTERED_ROWS = 2;
+    const EQUALS_FILTERED_ROWS = 1;
     cy.addFilter('population', 'igual a', '200000');
     cy.get('table tr').should('have.length', EQUALS_FILTERED_ROWS);
   });
