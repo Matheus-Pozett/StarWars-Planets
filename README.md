@@ -247,7 +247,7 @@ Ao finalizar e submeter o projeto, não se esqueça de avaliar sua experiência 
 
   - Você deve apagar a coluna `residents` de cada planeta antes de salvar os dados recebidos da API no contexto.
   - A requisição deve ser feita em um componente separado do componente da tabela.
-  - A API a ser consultada está [neste link](https://swapi.dev/api/planets). Você deverá fazer um fetch para a URL `https://swapi.dev/api/planets`.
+  - A API a ser consultada está [neste link](https://swapi.info/api/planets). Você deverá fazer um fetch para a URL `https://swapi.info/api/planets`.
   - A primeira linha da tabela deve conter os headers de cada coluna. As demais linhas serão as informações de cada planeta recebido da API.
 </details>
 
