@@ -32,3 +32,8 @@ export type FilterType = {
   comparison: string;
   value: number;
 };
+
+export type OrderType = {
+  column: string;
+  sort: 'ASC' | 'DESC';
+};

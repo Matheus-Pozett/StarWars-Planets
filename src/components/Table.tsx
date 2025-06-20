@@ -3,7 +3,7 @@ import { usePlanetContext } from '../context/PlanetContext';
 import { PlanetApiType } from '../types';
 
 function Table() {
-  const { planets, setPlanets, nameFilter, filters } = usePlanetContext();
+  const { planets, setPlanets, nameFilter, filters, order } = usePlanetContext();
 
   useEffect(() => {
     const fetchPlanets = async () => {
@@ -47,6 +47,22 @@ function Table() {
     });
   });
 
+  const sortedPlanets = [...filteredPlanets].sort((a, b) => {
+    const { column, sort } = order;
+
+    const valueA = a[column as keyof typeof a];
+    const valueB = b[column as keyof typeof b];
+
+    // Regra especial: planetas com 'unknown' vão para o final
+    if (valueA === 'unknown') return 1;
+    if (valueB === 'unknown') return -1;
+
+    if (sort === 'ASC') {
+      return Number(valueA) - Number(valueB);
+    }
+    return Number(valueB) - Number(valueA);
+  });
+
   return (
     <table>
       <thead>
@@ -67,7 +83,7 @@ function Table() {
         </tr>
       </thead>
       <tbody>
-        {filteredPlanets.map((planet) => (
+        {sortedPlanets.map((planet) => (
           <tr key={ planet.name }>
             <td>{planet.name}</td>
             <td>{planet.rotation_period}</td>

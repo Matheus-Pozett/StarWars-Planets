@@ -1,5 +1,6 @@
 import './App.css';
-import { ActiveFilter, FilterTable, NumericFilter, Table } from './components';
+import {
+  ActiveFilter, FilterTable, NumericFilter, SortFilter, Table } from './components';
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
         <FilterTable />
         <NumericFilter />
         <ActiveFilter />
+        <SortFilter />
       </div>
       <Table />
     </div>
