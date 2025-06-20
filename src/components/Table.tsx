@@ -58,6 +58,14 @@ function Table() {
     <div>
       <FilterTable />
       <NumericFilter />
+      <div>
+        {filters.map((f) => (
+          <div key={ f.column } data-testid="filter">
+            <p>{`${f.column} ${f.comparison} ${f.value}`}</p>
+          </div>
+
+        ))}
+      </div>
       <table>
         <thead>
           <tr>

@@ -1,24 +1,44 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FilterType } from '../types';
 import { usePlanetContext } from '../context/PlanetContext';
 
-const INITIAL_VALUES = {
-  column: 'population',
-  comparison: 'maior que',
-  value: 0,
-};
-
 function NumericFilter() {
   const { filters, setFilters } = usePlanetContext();
-  const [numericFilters, setNumericFilters] = useState<FilterType>(INITIAL_VALUES);
+
+  const allColumnOptions = [
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ];
+
+  const usedColumns = filters.map((filter) => filter.column);
+
+  const availableColumns = allColumnOptions.filter(
+    (option) => !usedColumns.includes(option),
+  );
+
+  const [numericFilter, setNumericFilter] = useState<FilterType>({
+    column: availableColumns[0],
+    comparison: 'maior que',
+    value: 0,
+  });
+
+  useEffect(() => {
+    setNumericFilter((prevState) => ({
+      ...prevState,
+      column: availableColumns[0],
+    }));
+  }, [filters, availableColumns]);
 
   const handleChangeNumericFilter = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = event.target;
 
-    setNumericFilters({
-      ...numericFilters,
+    setNumericFilter({
+      ...numericFilter,
       [name]: name === 'value' ? Number(value) : value,
     });
   };
@@ -26,7 +46,7 @@ function NumericFilter() {
   const handleClickNumericFilters = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setFilters([...filters, numericFilters]);
+    setFilters([...filters, numericFilter]);
   };
 
   return (
@@ -34,20 +54,20 @@ function NumericFilter() {
       <select
         name="column"
         data-testid="column-filter"
-        value={ numericFilters.column }
+        value={ numericFilter.column }
         onChange={ handleChangeNumericFilter }
       >
-        <option value="population">population</option>
-        <option value="orbital_period">orbital_period</option>
-        <option value="diameter">diameter</option>
-        <option value="rotation_period">rotation_period</option>
-        <option value="surface_water">surface_water</option>
+        {availableColumns.map((column) => (
+          <option key={ column } value={ column }>
+            {column}
+          </option>
+        ))}
       </select>
 
       <select
         name="comparison"
         data-testid="comparison-filter"
-        value={ numericFilters.comparison }
+        value={ numericFilter.comparison }
         onChange={ handleChangeNumericFilter }
       >
         <option value="maior que">maior que</option>
@@ -60,7 +80,7 @@ function NumericFilter() {
         name="value"
         min={ 0 }
         data-testid="value-filter"
-        value={ numericFilters.value }
+        value={ numericFilter.value }
         onChange={ handleChangeNumericFilter }
       />
       <button data-testid="button-filter">Filtrar</button>
